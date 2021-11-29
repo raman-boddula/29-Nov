@@ -30,100 +30,26 @@ app.use("/remote", Remote);
 app.use("/companies", Company);
 app.use("/jobs", Job);
 
+const query1 = require("./controllers/quer1.controller")
+const query2 = require("./controllers/quer2.controller")
+const query3 = require("./controllers/quer3.controller")
+const query4 = require("./controllers/quer4.controller")
+const query5 = require("./controllers/quer5.controller")
+const query6 = require("./controllers/quer6.controller")
 
 
+app.use("/jobsByCityAndSkill",query1)
+app.use("jobsBySkill", query2)
+app.use("jobsByRemote",query3)
 
-///finding jobs by city  &skill
-app.get("/jobsByCityAndSkill/:id/:skill", async (req, res) => {
-    try {
-        const jobs = await Job.find({ "city_id": req.params.id ,"skill_ids":req.params.skill}).populate("city_id").populate("skill_ids").populate("company_id")
-        return res.status(201).send(jobs)
-     }
-    catch (e) {
-        return res.status(500).json({ "status": e.message });
-    }
-})
-
-
+app.use("/jobsByNotice", query4);
+app.use("/jobsByRating/highToLow", query5)
+app.use("/jobsByRating/lowToHigh",query6)
+app.use("/company", query7);
+app.use("/moreJob",query8)
 //finding jobs by skills 
 
-app.get("/jobsBySkill/:id", async (req, res) => {
-    try {
-        const jobs = await Job.find({ "skill_ids": req.params.id }).populate("city_id").populate("skill_ids").populate("company_id")
-        return res.status(201).send(jobs)
-     }
-    catch (e) {
-        return res.status(500).json({ "status": e.message });
-    }
-})
-
-//find all the jobs that are available as Work from home.
-
-app.get("/jobsByRemote/:id", async (req, res) => {
-    try {
-        const jobs = await Job.find({ "remote_id": req.params.id }).populate("city_id").populate("skill_ids").populate("company_id").populate("remote_id").lean().exec();
-        return res.status(201).send(jobs)
-     }
-    catch (e) {
-        return res.status(500).json({ "status": e.message });
-    }
-})
-
 //ind all the jobs that will accept a notice period of 2 months.
-
-app.get("/jobsByNotice/:id", async (req, res) => {
-    try {
-        const jobs = await Job.find({ "notice_period": req.params.id }).populate("city_id").populate("skill_ids").populate("company_id").populate("remote_id").lean().exec();
-        return res.status(201).send(jobs)
-     }
-    catch (e) {
-        return res.status(500).json({ "status": e.message });
-    }
-})
-
-//find all jobs by sorting the jobs as per their rating.
-
-app.get("/jobsByRating/highToLow", async (req, res) => {
-    try {
-        const jobs = await Job.find().sort({"rating_id": 1}).populate("rating_id").populate("city_id").populate("skill_ids").populate("company_id").populate("remote_id").lean().exec();
-        return res.status(201).send(jobs)
-     }
-    catch (e) {
-        return res.status(500).json({ "status": e.message });
-    }
-})
-
-//low to high
-app.get("/jobsByRating/lowToHigh", async (req, res) => {
-    try {
-        const jobs = await Job.find().sort({"rating_id": -1}).populate("rating_id").populate("city_id").populate("skill_ids").populate("company_id").populate("remote_id").lean().exec();
-        return res.status(201).send(jobs)
-     }
-    catch (e) {
-        return res.status(500).json({ "status": e.message });
-    }
-})
-//an api to get details of the company.
-app.get("/company/:id", async (req, res) => {
-    try {
-        const data = await Company.findById(req.params.id).lean().exec();
-        return res.status(201).send(data)
-    }
-    catch (e) {
-        return res.status(500).json({"status": e.message});
-    }
-})
-//find the company that has the most open jobs.
-app.get("/moreJob/:id", async (req, res) =>
-{
-    try {
-        const data = await Job.find({"company_id":req.params.id}).populate("company_id").lean().exec();
-        return res.status(201).send(data)
-    }
-    catch (e) {
-        return res.status(500).json({"status": e.message});
-    }
-})
 
 
 app.listen(6543, async () => {
