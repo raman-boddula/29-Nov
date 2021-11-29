@@ -1,5 +1,6 @@
 //find all jobs by sorting the jobs as per their rating.
 const express = require("express");
+const Job = require("../models/jobs.models")
 
 const app = express.Router();
 app.get("", async (req, res) => {

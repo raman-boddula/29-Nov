@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const company = require("./company.models");
 
 const remote = require("./remote.model");
-const city = require("./cities.models")
+const city = require("./cities.model")
 const rating = require("./ratings.model")
 const skill = require("./skill.model")
 
@@ -11,28 +11,28 @@ const jobSchema = new mongoose.Schema({
     role: { type: String, required: true },
     company_id: {
         type: mongoose.Schema.Types.ObjectId,
-        ref:"company",
+        ref:company,
         required:true
     },
     remote_id: {
         type: mongoose.Schema.Types.ObjectId,
-        ref:"remote",
+        ref:remote,
         required:true
     },
     city_id: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref:"city",
+        ref:city,
         required:true
     }],
     notice_period: {type:String , required:true},
     rating_id : {
         type: mongoose.Schema.Types.ObjectId,
-        ref:"rating",
+        ref:rating,
         required:true
     },
     skill_ids: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref:"skill",
+        ref:skill,
         required:true
     }]
 }, {
@@ -40,4 +40,4 @@ const jobSchema = new mongoose.Schema({
     timestamps:true
 })
 
-module.exports = mongoose.model("job", jobSchema);
+module.exports = mongoose.model("job", jobSchema)

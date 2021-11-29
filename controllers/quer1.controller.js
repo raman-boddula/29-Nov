@@ -1,6 +1,7 @@
 ///finding jobs by city  &skill
 const express = require("express");
 
+const Job = require("../models/jobs.models")
 const app = express.Router();
 app.get("/:id/:skill", async (req, res) => {
     try {

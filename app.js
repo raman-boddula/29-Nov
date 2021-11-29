@@ -31,25 +31,24 @@ app.use("/companies", Company);
 app.use("/jobs", Job);
 
 const query1 = require("./controllers/quer1.controller")
-const query2 = require("./controllers/quer2.controller")
-const query3 = require("./controllers/quer3.controller")
-const query4 = require("./controllers/quer4.controller")
-const query5 = require("./controllers/quer5.controller")
-const query6 = require("./controllers/quer6.controller")
+const query2 = require("./controllers/query2.controller")
+const query3 = require("./controllers/query3.controller")
+const query4 = require("./controllers/query4.controller")
+const query5 = require("./controllers/query5.controller")
+const query6 = require("./controllers/query6.controller")
+const query7 = require("./controllers/query7.controller");
+const query8 = require("./controllers/query8")
 
 
 app.use("/jobsByCityAndSkill",query1)
-app.use("jobsBySkill", query2)
-app.use("jobsByRemote",query3)
+app.use("/jobsBySkill", query2)
+app.use("/jobsByRemote",query3)
 
 app.use("/jobsByNotice", query4);
 app.use("/jobsByRating/highToLow", query5)
 app.use("/jobsByRating/lowToHigh",query6)
 app.use("/company", query7);
 app.use("/moreJob",query8)
-//finding jobs by skills 
-
-//ind all the jobs that will accept a notice period of 2 months.
 
 
 app.listen(6543, async () => {
