@@ -241,6 +241,156 @@ app.delete("/remote/:id", async (req, res) => {
     }
 })
 
+//company schema
+
+const companySchema = new mongoose.Schema({
+    name:{type:String , required:true,unique:true}
+}, {
+    versionKey: false,
+})
+
+const Company = mongoose.model("company", companySchema);
+//comapy crud
+
+app.post("/company", async (req, res) => {
+    try {
+        const data = await Company.create(req.body);
+        return res.status(201).send(data)
+    }
+    catch (e) {
+        return res.status(500).json({ "status": e.message });
+    }
+})
+app.get("/company", async (req, res) => {
+    try {
+        const data = await Company.find().lean().exec();
+        return res.status(201).send(data)
+    }
+    catch (e) {
+        return res.status(500).json({"status": e.message});
+    }
+})
+
+app.get("/company/:id", async (req, res) => {
+    try {
+        const data = await Company.findById(req.params.id).lean().exec();
+        return res.status(201).send(data)
+    }
+    catch (e) {
+        return res.status(500).json({"status": e.message});
+    }
+})
+app.patch("/company/:id", async (req, res) => {
+    try {
+        const data = await Company.findByIdAndUpdate(req.params.id,req.body,{new:true}).lean().exec();
+        return res.status(201).send(data)
+    }
+    catch (e) {
+        return res.status(500).json({ "status": e.message });
+    }
+})
+app.delete("/company/:id", async (req, res) => {
+    try {
+        const data = await Company.findByIdAndDelete(req.params.id).lean().exec();
+        return res.status(201).send(data)
+    }
+    catch (e) {
+        return res.status(500).json({ "status": e.message });
+    }
+})
+
+
+//jobs schema 
+
+const jobSchema = new mongoose.Schema({
+    role: { type: String, required: true },
+    company_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref:"company",
+        required:true
+    },
+    remote_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref:"remote",
+        required:true
+    },
+    city_id: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref:"city",
+        required:true
+    }],
+    notice_period: {type:String , required:true},
+    rating_id : {
+        type: mongoose.Schema.Types.ObjectId,
+        ref:"rating",
+        required:true
+    },
+    skill_ids: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref:"skill",
+        required:true
+    }]
+}, {
+    versionKey: false,
+    timestamps:true
+})
+
+const Job = mongoose.model("job", jobSchema);
+
+app.post("/job", async (req, res) => {
+    try {
+        const data = await Job.create(req.body);
+        return res.status(201).send(data)
+    }
+    catch (e) {
+        return res.status(500).json({ "status": e.message });
+    }
+})
+app.get("/jobs", async (req, res) => {
+    try {
+        const data = await Job.find().populate("company_id").populate("remote_id").populate("rating_id").lean().exec();
+        return res.status(201).send(data)
+    }
+    catch (e) {
+        return res.status(500).json({"status": e.message});
+    }
+})
+
+app.get("/jobs/:id", async (req, res) => {
+    try {
+        const data = await Job.findById(req.params.id).lean().exec();
+        return res.status(201).send(data)
+    }
+    catch (e) {
+        return res.status(500).json({"status": e.message});
+    }
+})
+app.patch("/jobs/:id", async (req, res) => {
+    try {
+        const data = await Job.findByIdAndUpdate(req.params.id,req.body,{new:true}).lean().exec();
+        return res.status(201).send(data)
+    }
+    catch (e) {
+        return res.status(500).json({ "status": e.message });
+    }
+})
+app.delete("/jobs/:id", async (req, res) => {
+    try {
+        const data = await Job.findByIdAndDelete(req.params.id).lean().exec();
+        return res.status(201).send(data)
+    }
+    catch (e) {
+        return res.status(500).json({ "status": e.message });
+    }
+})
+
+
+
+
+
+
+
+
 app.listen(6543, async () => {
     await connect();
     console.log('we are connected on port 6543')
