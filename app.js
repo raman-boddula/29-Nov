@@ -126,7 +126,120 @@ app.delete("/skills/:id", async (req, res) => {
     }
 })
 
+///
+const ratingSchema = new mongoose.Schema({
+    rating: { type: String, unique: true, required: true }
+},
+    {
+        versionKey: false,
+        timestamps: true
+    });
 
+const Rating = mongoose.model("rating", ratingSchema);
+//ratinf crud
+
+app.post("/rating", async (req, res) => {
+    try {
+        const data = await Rating.create(req.body);
+        return res.status(201).send(data)
+    }
+    catch (e) {
+        return res.status(500).json({ "status": e.message });
+    }
+})
+app.get("/ratings", async (req, res) => {
+    try {
+        const data = await Rating.find().lean().exec();
+        return res.status(201).send(data)
+    }
+    catch (e) {
+        return res.status(500).json({"status": e.message});
+    }
+})
+
+app.get("/ratings/:id", async (req, res) => {
+    try {
+        const data = await Rating.findById(req.params.id).lean().exec();
+        return res.status(201).send(data)
+    }
+    catch (e) {
+        return res.status(500).json({"status": e.message});
+    }
+})
+app.patch("/ratings/:id", async (req, res) => {
+    try {
+        const data = await Rating.findByIdAndUpdate(req.params.id,req.body,{new:true}).lean().exec();
+        return res.status(201).send(data)
+    }
+    catch (e) {
+        return res.status(500).json({ "status": e.message });
+    }
+})
+app.delete("/ratings/:id", async (req, res) => {
+    try {
+        const data = await Rating.findByIdAndDelete(req.params.id).lean().exec();
+        return res.status(201).send(data)
+    }
+    catch (e) {
+        return res.status(500).json({ "status": e.message });
+    }
+})
+//remote schema
+const remoteSchema = new mongoose.Schema({
+    type: { type: String, required: true, unique:true }
+}, {
+    versionKey:false
+})
+
+//remote crud
+const Remote = mongoose.model("remote", remoteSchema);
+
+app.post("/remote", async (req, res) => {
+    try {
+        const data = await Remote.create(req.body);
+        return res.status(201).send(data)
+    }
+    catch (e) {
+        return res.status(500).json({ "status": e.message });
+    }
+})
+app.get("/remote", async (req, res) => {
+    try {
+        const data = await Remote.find().lean().exec();
+        return res.status(201).send(data)
+    }
+    catch (e) {
+        return res.status(500).json({"status": e.message});
+    }
+})
+
+app.get("/remote/:id", async (req, res) => {
+    try {
+        const data = await Remote.findById(req.params.id).lean().exec();
+        return res.status(201).send(data)
+    }
+    catch (e) {
+        return res.status(500).json({"status": e.message});
+    }
+})
+app.patch("/remote/:id", async (req, res) => {
+    try {
+        const data = await Remote.findByIdAndUpdate(req.params.id,req.body,{new:true}).lean().exec();
+        return res.status(201).send(data)
+    }
+    catch (e) {
+        return res.status(500).json({ "status": e.message });
+    }
+})
+app.delete("/remote/:id", async (req, res) => {
+    try {
+        const data = await Remote.findByIdAndDelete(req.params.id).lean().exec();
+        return res.status(201).send(data)
+    }
+    catch (e) {
+        return res.status(500).json({ "status": e.message });
+    }
+})
 
 app.listen(6543, async () => {
     await connect();
