@@ -1,5 +1,12 @@
 const mongoose = require("mongoose");
 
+const company = require("./company.models");
+
+const remote = require("./remote.model");
+const city = require("./cities.models")
+const rating = require("./ratings.model")
+const skill = require("./skill.model")
+
 const jobSchema = new mongoose.Schema({
     role: { type: String, required: true },
     company_id: {
