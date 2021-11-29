@@ -244,7 +244,11 @@ app.delete("/remote/:id", async (req, res) => {
 //company schema
 
 const companySchema = new mongoose.Schema({
-    name:{type:String , required:true,unique:true}
+    name: { type: String, required: true, unique: true },
+    description: { type: String, required: true },
+    jobs_opening: [
+        {type:String ,required:true }
+    ]
 }, {
     versionKey: false,
 })
@@ -385,10 +389,10 @@ app.delete("/jobs/:id", async (req, res) => {
 })
 
 
-///finding jobs by city
-app.get("/jobsByCity/:id", async (req, res) => {
+///finding jobs by city  &skill
+app.get("/jobsByCityAndSkill/:id/:skill", async (req, res) => {
     try {
-        const jobs = await Job.find({ "city_id": req.params.id }).populate("city_id").populate("skill_ids").populate("company_id")
+        const jobs = await Job.find({ "city_id": req.params.id ,"skill_ids":req.params.skill}).populate("city_id").populate("skill_ids").populate("company_id")
         return res.status(201).send(jobs)
      }
     catch (e) {
@@ -418,6 +422,62 @@ app.get("/jobsByRemote/:id", async (req, res) => {
      }
     catch (e) {
         return res.status(500).json({ "status": e.message });
+    }
+})
+
+//ind all the jobs that will accept a notice period of 2 months.
+
+app.get("/jobsByNotice/:id", async (req, res) => {
+    try {
+        const jobs = await Job.find({ "notice_period": req.params.id }).populate("city_id").populate("skill_ids").populate("company_id").populate("remote_id").lean().exec();
+        return res.status(201).send(jobs)
+     }
+    catch (e) {
+        return res.status(500).json({ "status": e.message });
+    }
+})
+
+//find all jobs by sorting the jobs as per their rating.
+
+app.get("/jobsByRating/highToLow", async (req, res) => {
+    try {
+        const jobs = await Job.find().sort({"rating_id": 1}).populate("rating_id").populate("city_id").populate("skill_ids").populate("company_id").populate("remote_id").lean().exec();
+        return res.status(201).send(jobs)
+     }
+    catch (e) {
+        return res.status(500).json({ "status": e.message });
+    }
+})
+
+//low to high
+app.get("/jobsByRating/lowToHigh", async (req, res) => {
+    try {
+        const jobs = await Job.find().sort({"rating_id": -1}).populate("rating_id").populate("city_id").populate("skill_ids").populate("company_id").populate("remote_id").lean().exec();
+        return res.status(201).send(jobs)
+     }
+    catch (e) {
+        return res.status(500).json({ "status": e.message });
+    }
+})
+//an api to get details of the company.
+app.get("/company/:id", async (req, res) => {
+    try {
+        const data = await Company.findById(req.params.id).lean().exec();
+        return res.status(201).send(data)
+    }
+    catch (e) {
+        return res.status(500).json({"status": e.message});
+    }
+})
+//find the company that has the most open jobs.
+app.get("/moreJob/:id", async (req, res) =>
+{
+    try {
+        const data = await Job.find({"company_id":req.params.id}).populate("company_id").lean().exec();
+        return res.status(201).send(data)
+    }
+    catch (e) {
+        return res.status(500).json({"status": e.message});
     }
 })
 
