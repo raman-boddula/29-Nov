@@ -348,7 +348,7 @@ app.post("/job", async (req, res) => {
 })
 app.get("/jobs", async (req, res) => {
     try {
-        const data = await Job.find().populate("company_id").populate("remote_id").populate("rating_id").lean().exec();
+        const data = await Job.find().populate("company_id").populate("skill_ids").populate("city_id").populate("remote_id").populate("rating_id").lean().exec();
         return res.status(201).send(data)
     }
     catch (e) {
@@ -385,10 +385,41 @@ app.delete("/jobs/:id", async (req, res) => {
 })
 
 
+///finding jobs by city
+app.get("/jobsByCity/:id", async (req, res) => {
+    try {
+        const jobs = await Job.find({ "city_id": req.params.id }).populate("city_id").populate("skill_ids").populate("company_id")
+        return res.status(201).send(jobs)
+     }
+    catch (e) {
+        return res.status(500).json({ "status": e.message });
+    }
+})
 
 
+//finding jobs by skills 
 
+app.get("/jobsBySkill/:id", async (req, res) => {
+    try {
+        const jobs = await Job.find({ "skill_ids": req.params.id }).populate("city_id").populate("skill_ids").populate("company_id")
+        return res.status(201).send(jobs)
+     }
+    catch (e) {
+        return res.status(500).json({ "status": e.message });
+    }
+})
 
+//find all the jobs that are available as Work from home.
+
+app.get("/jobsByRemote/:id", async (req, res) => {
+    try {
+        const jobs = await Job.find({ "remote_id": req.params.id }).populate("city_id").populate("skill_ids").populate("company_id").populate("remote_id").lean().exec();
+        return res.status(201).send(jobs)
+     }
+    catch (e) {
+        return res.status(500).json({ "status": e.message });
+    }
+})
 
 
 app.listen(6543, async () => {
