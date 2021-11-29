@@ -1,4 +1,11 @@
 
+const express = require("express");
+
+const app = express.Router();
+
+const Skill = require("../models/skill.model")
+
+
 app.post("/skill", async (req, res) => {
     try {
         const data = await Skill.create(req.body);

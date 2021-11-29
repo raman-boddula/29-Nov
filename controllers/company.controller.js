@@ -2,7 +2,7 @@ const express = require("express");
 
 const app = express.Router();
 
-const Job = require("../models/company.models")
+const Company = require("../models/company.models")
 app.post("", async (req, res) => {
     try {
         const data = await Company.create(req.body);
