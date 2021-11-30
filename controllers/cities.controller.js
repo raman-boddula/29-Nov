@@ -1,10 +1,11 @@
 const express = require("express");
 
-const app = express.Router();
 
-const City = require("../models/cities.models")
+const City = require("../models/cities.model")
 
-app.post("", async (req, res) => {
+const router = express.Router();
+
+router.post("", async (req, res) => {
     try {
         const data = await City.create(req.body);
         return res.status(201).send(data)
@@ -13,7 +14,7 @@ app.post("", async (req, res) => {
         return res.status(500).json({ "status": e.message });
     }
 })
-app.get("", async (req, res) => {
+router.get("", async (req, res) => {
     try {
         const data = await City.find().lean().exec();
         return res.status(201).send(data)
@@ -23,7 +24,7 @@ app.get("", async (req, res) => {
     }
 })
 
-app.get("/:id", async (req, res) => {
+router.get("/:id", async (req, res) => {
     try {
         const data = await City.findById(req.params.id).lean().exec();
         return res.status(201).send(data)
@@ -32,7 +33,7 @@ app.get("/:id", async (req, res) => {
         return res.status(500).json({"status": e.message});
     }
 })
-app.patch("/:id", async (req, res) => {
+router.patch("/:id", async (req, res) => {
     try {
         const data = await City.findByIdAndUpdate(req.params.id,req.body,{new:true}).lean().exec();
         return res.status(201).send(data)
@@ -41,7 +42,7 @@ app.patch("/:id", async (req, res) => {
         return res.status(500).json({ "status": e.message });
     }
 })
-app.delete("/:id", async (req, res) => {
+router.delete("/:id", async (req, res) => {
     try {
         const data = await City.findByIdAndDelete(req.params.id).lean().exec();
         return res.status(201).send(data)
@@ -51,4 +52,4 @@ app.delete("/:id", async (req, res) => {
     }
 })
 
-module.exports = app;
+module.exports = router;

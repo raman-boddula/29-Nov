@@ -2,7 +2,7 @@ const express = require("express");
 
 const app = express.Router();
 
-const Remote = require("../models/remote.models")
+const Remote = require("../models/remote.model")
 
 
 app.post("/remote", async (req, res) => {

@@ -1,6 +1,6 @@
 const express = require("express");
 
-const mongoose = require('mongoose');
+// const mongoose = require('mongoose');
 
 const connect = require("./configs/db")
 
@@ -10,45 +10,53 @@ app.use(express.json());
 
 
 
-const City = require("./models/cities.model")
+const CityController = require("./controllers/cities.controller")
+
+app.use("/cities", CityController);
+
+const SkillController = require("./controllers/skill.controller")
+app.use("/skills", SkillController);
+
+const RatingController =require("./controllers/rating.controller")
+app.use("/ratings", RatingController);
+
+const RemoteController = require("./controllers/remote.controller")
+app.use("/remote", RemoteController);
 
 
-const Skill = require("./models/skill.model")
+const CompanyController =require("./controllers/company.controller");
+app.use("/companies", CompanyController);
 
-const Rating =require("./models/ratings.model")
-const Remote = require("./models/remote.model")
+const JobController = require("./controllers/jobs.controller")
+app.use("/jobs", JobController);
 
-
-const Company =require("./models/company.models");
-
-const Job = require("./models/jobs.models")
-
-app.use("/cities", City);
-app.use("/skills", Skill);
-app.use("/ratings", Rating);
-app.use("/remote", Remote);
-app.use("/companies", Company);
-app.use("/jobs", Job);
 
 const query1 = require("./controllers/quer1.controller")
+app.use("/jobsByCityAndSkill", query1);
+
 const query2 = require("./controllers/query2.controller")
+app.use("/jobsBySkill", query2);
+
 const query3 = require("./controllers/query3.controller")
-const query4 = require("./controllers/query4.controller")
-const query5 = require("./controllers/query5.controller")
-const query6 = require("./controllers/query6.controller")
-const query7 = require("./controllers/query7.controller");
-const query8 = require("./controllers/query8")
-
-
-app.use("/jobsByCityAndSkill",query1)
-app.use("/jobsBySkill", query2)
 app.use("/jobsByRemote",query3)
 
+const query4 = require("./controllers/query4.controller")
 app.use("/jobsByNotice", query4);
+
+const query5 = require("./controllers/query5.controller")
 app.use("/jobsByRating/highToLow", query5)
+
+const query6 = require("./controllers/query6.controller")
 app.use("/jobsByRating/lowToHigh",query6)
+
+const query7 = require("./controllers/query7.controller");
 app.use("/company", query7);
+
+const query8 = require("./controllers/query8")
 app.use("/moreJob",query8)
+
+
+
 
 
 app.listen(6543, async () => {
